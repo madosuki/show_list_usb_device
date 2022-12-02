@@ -1,5 +1,4 @@
 use rusb::{
-    UsbContext,
     DeviceList,
     GlobalContext,
 };
@@ -7,9 +6,14 @@ use rusb::{
 fn show_device(device_context: DeviceList<GlobalContext>) {    
     
     for device in device_context.iter() {
-        let device_desc = device.device_descriptor().unwrap();
+        let device_desc = device.device_descriptor();
+        match device_desc {
+            Ok(_v) => {
+                println!("Bus {:03}", device.bus_number());
+            },
+            Err(_e) => continue,
+        }
 
-        println!("Bus {:03}", device.bus_number());
     }
 }
 
